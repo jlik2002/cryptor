@@ -1,21 +1,19 @@
 package main
 
 import (
+	"crypton/crypto"
+
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.GET("/hello/:name", func(c *gin.Context) {
-		name := c.Param("name")
-		c.JSON(200, gin.H{
-			"message": "Hello " + name,
-		})
-	})
-	r.Run(":8070")
+	router := gin.Default()
+
+	fileUploadController := crypto.NewCryptoFileController()
+
+	router.POST("/upload", fileUploadController.EncryptFile)
+	router.POST("/decrypt", fileUploadController.DecryptFile)
+	router.GET("/download/:name", fileUploadController.DownloadFile)
+
+	router.Run(":8070")
 }
