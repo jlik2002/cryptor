@@ -1,5 +1,5 @@
 # Welcome to Crypton!
-
+This project makes little practical sense to utilize. It provides me with an opportunity to familiarize myself with Go
 ## Examples request for this API
 
 For upload file to server
