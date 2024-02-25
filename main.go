@@ -13,7 +13,7 @@ func main() {
 
 	router.POST("/upload", fileUploadController.EncryptFile)
 	router.POST("/decrypt", fileUploadController.DecryptFile)
-	router.GET("/download/:name", fileUploadController.DownloadFile)
+	router.POST("/download", fileUploadController.DownloadFile)
 
 	router.Run(":8070")
 }

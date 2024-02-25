@@ -121,7 +121,7 @@ func (ctrl *CryptoFileController) EncryptFile(c *gin.Context) {
 }
 
 func (ctrl *CryptoFileController) DecryptFile(c *gin.Context) {
-	var req DecryptRequest
+	var req FileRequest
 
 	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -143,8 +143,16 @@ func (ctrl *CryptoFileController) DecryptFile(c *gin.Context) {
 }
 
 func (ctrl *CryptoFileController) DownloadFile(c *gin.Context) {
-	name := c.Param("name")
-	path := "./uploads/" + name + "_crypto"
-	c.Header("Content-Disposition", "attachment; filename=\""+name+"_crypto\"")
+	var req FileRequest
+	if err := c.ShouldBind(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+	passPhrase, err := hashPassPhrase(req.PassPhrase)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "passPhrase is required"})
+		return
+	}
+	path := "./uploads/" + req.FileName + "_" + passPhrase
+	c.Header("Content-Disposition", "attachment; filename=\""+req.FileName+"\"")
 	c.File(path)
 }
